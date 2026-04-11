@@ -1,0 +1,17 @@
+openai==1.30.1
+anthropic==0.25.0
+google-generativeai==0.3.0
+groq
+python-dotenv==1.0.0
+
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+
+python-docx
+docx2txt
+pdfplumber
+
+requests
+httpx
