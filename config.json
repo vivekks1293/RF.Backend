@@ -1,7 +1,7 @@
 {
-    "provider": "groq",
+    "provider": "openai",
     "openai":{
-        "model": "gpt-4o-mini"
+        "model": "gpt-4o-mini" 
     },
     "gemini":{
         "model": "gemini-2.5-flash"

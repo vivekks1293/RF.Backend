@@ -1,43 +1,57 @@
 import os
 import json
+from groq import Groq
 import google.generativeai as genai
 from openai import OpenAI
-from dotenv import load_dotenv
-from groq import Groq
 
-load_dotenv()
-
+# ── Load config ───────────────────────────────────────────────────────────────
 with open("config.json", "r") as f:
     CONFIG = json.load(f)
 
-def run_openai(promt):
-    pass
 
-def run_gemini(promt):
-    pass
-
-def run_groc(promt):
-    client = Groq(api_key = os.getenv("GROQ_API_KEY"))
+# ── Groq ──────────────────────────────────────────────────────────────────────
+def run_groq(prompt):
+    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model=CONFIG["groq"]["model"],
         messages=[
-            {"role": "user", "content": promt}
+            {"role": "user", "content": prompt}
         ]
     )
-    raw = response.choices[0].message.content
-    return raw
+    print(f">>> [GROQ] Response preview: {response.choices[0].message.content[:100]}")
+    return response.choices[0].message.content
 
-def run_llm(promt):
+
+# ── Gemini ────────────────────────────────────────────────────────────────────
+def run_gemini(prompt):
+    genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+    model = genai.GenerativeModel(CONFIG["gemini"]["model"])
+    response = model.generate_content(prompt)
+    print(f">>> [Gemini] Response preview: {response.text[:100]}")
+    return response.text
+
+
+# ── OpenAI ────────────────────────────────────────────────────────────────────
+def run_openai(prompt):
+    client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
+    )
+    return response.choices[0].message.content
+
+
+# ── Router ────────────────────────────────────────────────────────────────────
+def run_llm(prompt):
     provider = CONFIG["provider"]
 
-    if provider == "openai":
-        return run_openai(promt)
     if provider == "groq":
-        return run_groc(promt)
+        return run_groq(prompt)
+    elif provider == "openai":
+        return run_openai(prompt)
     elif provider == "gemini":
-        conversation_text = "\n".join(
-            f"{m['role']: {m['content']}} " for m in promt
-        )
-        return run_gemini(conversation_text)
+        return run_gemini(prompt)
     else:
-        print("Invalid provide!!")
+        raise ValueError(f"Invalid provider: '{provider}'. Must be groq, openai or gemini.")

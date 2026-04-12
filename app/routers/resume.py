@@ -36,8 +36,6 @@ async def parse_resume(file:UploadFile = File(...)):
                 text += para.text + "\n"
     resumePromt = getFinalPromt(text)
     raw = run_llm(resumePromt)
-    print(raw[:300])
-
     raw = raw.strip()
     if "```" in raw:
         match = re.search(r'```(?:json)?\s*([\s\S]*?)```', raw)
