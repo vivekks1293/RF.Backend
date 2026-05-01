@@ -20,7 +20,7 @@ class EducationEntry(BaseModel):
     institution: str
     degree: str
     field: Optional[str]
-    gradyear: str
+    graduationYear: str
 
 class BaseResume(BaseModel):
     name: str

@@ -1,5 +1,5 @@
 {
-    "provider": "openai",
+    "provider": "groq",
     "openai":{
         "model": "gpt-4o-mini" 
     },

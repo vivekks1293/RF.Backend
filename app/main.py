@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import resume
+from app.routers import jobs, resume
 
 app = FastAPI(
     title = "RoleFit App",
@@ -17,6 +17,7 @@ app.add_middleware(
 )
 
 app.include_router(resume.router)
+app.include_router(jobs.router) 
 
 @app.get("/")
 def root():
