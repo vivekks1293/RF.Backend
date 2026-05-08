@@ -3,6 +3,8 @@ from typing import Optional
 from app.models.resume import BaseResume
 
 
+# ── Analyse models ────────────────────────────────────────────────────────────
+
 class JobInput(BaseModel):
     id: str
     label: str
@@ -19,15 +21,40 @@ class AnalyseRequest(BaseModel):
 
 class JobAnalysisResult(BaseModel):
     jobId: str
-    status: str           # "success" | "invalid_jd" | "error"
-    matchScore: int       # 0-100
-    matchLevel: str       # "strong" | "medium" | "weak" | "none"
+    status: str
+    matchScore: int
+    matchLevel: str
     summary: str
     jdSkills: list[str]
     yourSkills: list[str]
     gaps: list[str]
-    reason: Optional[str] = None  # populated if invalid_jd
+    reason: Optional[str] = None
 
 
 class AnalyseResponse(BaseModel):
     results: list[JobAnalysisResult]
+
+
+class TailorJobInput(BaseModel):
+    id: str
+    label: str
+    company: str
+    title: str
+    rawText: str
+
+
+class TailorAnalysisHints(BaseModel):
+    jdSkills: list[str]
+    gaps: list[str]
+    matchLevel: str
+
+
+class TailorRequest(BaseModel):
+    resume: BaseResume
+    job: TailorJobInput
+    analysis: TailorAnalysisHints
+
+
+class TailorResponse(BaseModel):
+    jobId: str
+    tailoredResume: BaseResume

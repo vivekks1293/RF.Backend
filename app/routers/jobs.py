@@ -11,8 +11,6 @@ router = APIRouter(prefix="/api/jobs", tags=["jobs"])
 
 @router.post("/analyse", response_model=AnalyseResponse)
 async def analyse_jobs(request: AnalyseRequest):
-
-    # Fire all jobs in parallel
     tasks = [
         process_single_job(request.resume, job)
         for job in request.jobs
